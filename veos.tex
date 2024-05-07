@@ -1,13 +1,14 @@
 \documentclass{article}
-
+\synctex=1
 \usepackage{arxiv}
-
+\usepackage{graphicx}
+\usepackage{tikz}
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
 \usepackage{hyperref}       % hyperlinks
 \usepackage{url}            % simple URL typesetting
 \usepackage{booktabs}       % professional-quality tables
-\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{amsmath, amssymb, amsfonts}       % blackboard math symbols
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 \usepackage{cleveref}       % smart cross-referencing
@@ -15,8 +16,8 @@
 \usepackage{graphicx}
 \usepackage{natbib}
 \usepackage{doi}
-
-\title{A template for the \emph{arxiv} style}
+\usepackage{svg}
+\title{My VEOS paper}
 
 % Here you can change the date presented in the paper title
 %\date{September 9, 1985}
@@ -59,7 +60,7 @@
 \renewcommand\Authfont{\bfseries}
 \setlength{\affilsep}{0em}
 % box is needed for correct spacing with authblk
-\newbox{\orcid}\sbox{\orcid}{\includegraphics[scale=0.06]{orcid.pdf}} 
+\newbox{\orcid}\sbox{\orcid}{\includegraphics[scale=0.06]{orcid.pdf}}
 \author[1]{%
 	\href{https://orcid.org/0000-0000-0000-0000}{\usebox{\orcid}\hspace{1mm}David S.~Hippocampus\thanks{\texttt{hippo@cs.cranberry-lemon.edu}}}%
 }
@@ -75,7 +76,7 @@
 %\renewcommand{\undertitle}{Technical Report}
 \renewcommand{\shorttitle}{\textit{arXiv} Template}
 
-%%% Add PDF metadata to help others organize their library
+%%% Add PDF metadata to help others organize their l ibrary
 %%% Once the PDF is generated, you can check the metadata with
 %%% $ pdfinfo template.pdf
 \hypersetup{
@@ -91,13 +92,72 @@ pdfkeywords={First keyword, Second keyword, More},
 \begin{abstract}
 	\lipsum[1]
 \end{abstract}
-
+ w
 
 % keywords can be removed
 \keywords{First keyword \and Second keyword \and More}
 
 
 \section{Introduction}
+\label{sec:intro}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+  \draw[thin,dotted] (-3,-3) grid (3,3);
+  \draw[->] (-3,0) -- (3,0);
+  \draw[->] (0,-3) -- (0,3);
+  \end{tikzpicture}
+  \caption{Caption}
+  \label{label}
+\end{figure}
+
+\[
+\gamma
+\]
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics{images/test.png}
+  \caption{\label{fig:label} test image}
+\end{figure}
+
+[[excalidraw:/home/n/.org.d/excalidraw/f8f6a900-2e09-45ba-bbec-87f70bcf7b80.excalidraw.svg]]
+
+
+\(\alpha\)
+
+\[
+\frac{d}{a}
+\]
+
+\[
+\beta \cdot \Box
+\implies \overleftarrow{b}
+\arcsin(\alpha)
+\]
+
+
+
+The Taylor expansion of
+\(e^{x}\)
+
+
+\[
+x + \frac{x^2}{2} + \frac{x^3}{6} + \frac{x^4}{24} + \frac{x^5}{120} + \frac{x^6}{720} + \frac{x^7}{5040} + \frac{x^8}{40320} + 1
+\]
+
+
+\(\nabla\)
+
+
+\texttt{definition}
+
+\textsl{theorem}
+
+
+
+
 \lipsum[2]
 \lipsum[3]
 
