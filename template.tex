@@ -2,6 +2,7 @@
 
 \usepackage{arxiv}
 
+\usepackage{tikz}
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
 \usepackage{hyperref}       % hyperlinks
@@ -15,6 +16,7 @@
 \usepackage{graphicx}
 \usepackage{natbib}
 \usepackage{doi}
+\graphicspath{{images/}}
 
 \title{A template for the \emph{arxiv} style}
 
@@ -90,6 +92,20 @@ pdfauthor={David S.~Hippocampus, Elias D.~Striatum},
 pdfkeywords={First keyword, Second keyword, More},
 }
 
+%%% Add command for include svg
+\newcommand{\executeiffilenewer}[3]{%
+ \ifnum\pdfstrcmp{\pdffilemoddate{#1}}%
+ {\pdffilemoddate{#2}}>0%
+ {\immediate\write18{#3}}\fi%
+}
+
+\newcommand{\includesvg}[1]{%
+ \executeiffilenewer{#1.svg}{#1.pdf}%
+ {inkscape -D #1.svg %
+ -o #1.pdf --export-latex}%
+ \input{#1.pdf_tex}%
+}
+
 \begin{document}
 \maketitle
 
@@ -103,6 +119,7 @@ pdfkeywords={First keyword, Second keyword, More},
 
 
 \section{Introduction}
+
 \lipsum[2]
 \lipsum[3]
 
@@ -149,8 +166,36 @@ See Figure \ref{fig:fig1}. Here is how you add footnotes. \footnote{Sample of th
 	\label{fig:fig1}
 \end{figure}
 
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+  \draw[thin,dotted] (-3,-3) grid (3,3);
+  \draw[->] (-3,0) -- (3,0);
+  \draw[->] (0,-3) -- (0,3);
+  \end{tikzpicture}
+  \caption{Caption}
+  \label{label}
+\end{figure}
+
+\[
+\gamma
+\]
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics{images/test.png}
+  \caption{\label{fig:label} test image}
+\end{figure}
 \subsection{Tables}
 See awesome Table~\ref{tab:table}.
+
+
+\begin{figure}[ht]
+  \centering
+  \def\svgwidth{\columnwidth}
+  \includesvg{images/test_excalidraw}
+  \caption{\label{fig:label} test excalidraw export image}
+\end{figure}
 
 The documentation for \verb+booktabs+ (`Publication quality tables in LaTeX') is available from:
 \begin{center}

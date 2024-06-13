@@ -3,6 +3,7 @@
 \usepackage{arxiv}
 \usepackage{graphicx}
 \usepackage{tikz}
+\usepackage{svg}
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
 \usepackage{hyperref}       % hyperlinks
@@ -17,7 +18,10 @@
 \usepackage{natbib}
 \usepackage{doi}
 \usepackage{svg}
-\title{My VEOS paper}
+%\usepackage{import}
+\graphicspath{{images/}}
+\title{Vehicle energy optimization system - an application of deep reinforcement learning with human in the loop}
+
 
 % Here you can change the date presented in the paper title
 %\date{September 9, 1985}
@@ -29,13 +33,8 @@
 \uniqueAffiliationtrue
 
 \ifuniqueAffiliation % Standard variant of author block
-\author{ \href{https://orcid.org/0009-0003-0705-2612}{\includegraphics[scale=0.06]{orcid.pdf}\hspace{1mm}Binjian Xin}\thanks{Use footnote for providing further
-		information about author (webpage, alternative
-		address)---\emph{not} for acknowledging funding agencies.} \\
-	Intelligent Systems\\
-	Newrizon Inc.\\
-	9th Floor, Building 15, 2177 Shenkun Road\\
-	Minhang District, Shanghai\\
+\author{ \href{https://orcid.org/0009-0003-0705-2612}{\includegraphics[scale=0.06]{orcid.pdf}\hspace{1mm}Binjian Xin}\thanks{} \\
+	Shanghai\\
 	\texttt{binjian.xin@gmail.com} \\
 	%% examples of more authors
 	%% \AND
@@ -86,13 +85,14 @@ pdfauthor={David S.~Hippocampus, Elias D.~Striatum},
 pdfkeywords={First keyword, Second keyword, More},
 }
 
+
+
 \begin{document}
 \maketitle
 
 \begin{abstract}
 	\lipsum[1]
 \end{abstract}
- w
 
 % keywords can be removed
 \keywords{First keyword \and Second keyword \and More}
@@ -100,6 +100,12 @@ pdfkeywords={First keyword, Second keyword, More},
 
 \section{Introduction}
 \label{sec:intro}
+
+\lipsum[4]
+
+\[
+\gamma
+\]
 
 \begin{figure}
   \centering
@@ -112,17 +118,19 @@ pdfkeywords={First keyword, Second keyword, More},
   \label{label}
 \end{figure}
 
-\[
-\gamma
-\]
 
 \begin{figure}[ht]
   \centering
-  \includegraphics{images/test.png}
+  \includegraphics{test.png}
   \caption{\label{fig:label} test image}
 \end{figure}
 
-[[excalidraw:/home/n/.org.d/excalidraw/f8f6a900-2e09-45ba-bbec-87f70bcf7b80.excalidraw.svg]]
+\begin{figure}[ht]
+  \centering
+  \def\svgwidth{\columnwidth}
+  \input{images/test_excalidraw.pdf_tex}
+  \caption{\label{fig:label} test excalidraw export image}
+\end{figure}
 
 
 \(\alpha\)
@@ -154,9 +162,6 @@ x + \frac{x^2}{2} + \frac{x^3}{6} + \frac{x^4}{24} + \frac{x^5}{120} + \frac{x^6
 \texttt{definition}
 
 \textsl{theorem}
-
-
-
 
 \lipsum[2]
 \lipsum[3]
@@ -212,7 +217,6 @@ The documentation for \verb+booktabs+ (`Publication quality tables in LaTeX') is
 	\url{https://www.ctan.org/pkg/booktabs}
 \end{center}
 
-
 \begin{table}
 	\caption{Sample table title}
 	\centering
@@ -237,11 +241,26 @@ The documentation for \verb+booktabs+ (`Publication quality tables in LaTeX') is
 	\item Aliquam dignissim blandit est, in dictum tortor gravida eget. In ac rutrum magna.
 \end{itemize}
 
+\citet{DBLP:journals/corr/abs-2402-05929}
 
-\bibliographystyle{unsrtnat}
+\cite[see][Page 11]{chen17:_ucb_explor_q_ensem}
+
+\Citep[see][page 2]{DBLP:books/mc/22/DijkstraLMSS22}
+
+
+
+\citet{DBLP:journals/cacm/Lamport22}
+
+\citet{kour2014real}
+
+\cite{vidal03:_learn_multiag_system}
+
+\cite{wong21:_deep_multiag_reinf_learn}
+
+
+%\bibliographystyle{unsrtnat}
+\bibliographystyle{abbrvnat}
 \bibliography{references}  %%% Uncomment this line and comment out the ``thebibliography'' section below to use the external .bib file (using bibtex) .
-
-
 %%% Uncomment this section and comment out the \bibliography{references} line above to use inline references.
 % \begin{thebibliography}{1}
 
