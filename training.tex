@@ -63,6 +63,31 @@
           \fi
         \fi
         \ifnum\pdfstrcmp{\Inp}{concat}=0
+          \ifnum\Y=1
+            \ifnum\m=\X
+              \foreach \Z in {1,...,5}
+              {
+                \ifnum\Z=4
+                \else
+                  \draw[->] [overlay] (nn-1-3-\Z) -- (nn-\nn-\Y-\m);
+                  \draw[->] [overlay] (nn-2-2-\Z) -- (nn-\nn-\Y-\m);
+                \fi
+              }
+            \else
+              \ifnum\m=\Miss
+              \else
+                \foreach \Z in {1,...,5}
+                {
+                  \ifnum\Z=4
+                  \else
+                    \draw[->] [overlay] (nn-1-3-\Z) -- (nn-\nn-\Y-\m);
+                    \draw[->] [overlay] (nn-2-2-\Z) -- (nn-\nn-\Y-\m);
+                  \fi
+                }
+              \fi
+            \fi
+          \else
+          \fi
         \else
           \ifnum\Y=1
             \ifnum\m=\X
@@ -89,12 +114,12 @@
      Hidden Layer 2/5/cyan/4/h2//32}
    \DrawNeuronalNetwork[2][0][2][action]{Input Layer/5/green/4/inp2//68,
      Hidden Layer 1/5/yellow/4/out//32}
-   \DrawNeuronalNetwork[3][3][6][concat]{Hidden Layer/5/orange/4/out//64,
+   \DrawNeuronalNetwork[3][3][8][concat]{Hidden Layer/5/orange/4/out//64,
      Hidden Layer 1/5/blue/4/h1//64,
      Output Layer 2/1/green/0/output//1}
   \end{scope}
   \path (NN.south) node[below]{Estimated parameter\\ $\theta$};
-  \path (nn-3-3-1.east) -- node[above]{Action value\\ $\Pi(\theta,a)$}++ (4em,0);
+  \path (nn-3-3-1.east) -- node[above]{Action value\\ $q_{\pi_{\theta}}(s,a)$}++ (4em,0);
  \end{scope}
  \node[fit=(T),label={[anchor=north west]north west:Critic},inner sep=1em,draw]
   (TF){};
