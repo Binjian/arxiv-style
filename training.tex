@@ -1,6 +1,6 @@
 \documentclass[tikz,border=3mm]{standalone}
 \usepackage{xargs}
-\usetikzlibrary{positioning,fit}
+\usetikzlibrary{positioning,fit,calc}
 \begin{document}
 
 \tikzset{%
@@ -36,10 +36,10 @@
 }
 \ifnum\pdfstrcmp{\Inp}{concat}=0
 \else
-  \node (state) at (\Yoff,\Xoff) [draw,minimum width=6em,minimum height=4em] {\Inp};
+  \node (\nn-state) at (\Yoff,\Xoff) [draw,minimum width=6em,minimum height=4em] {\Inp};
 \fi
 \foreach \Layer/\X/\Col/\Miss/\Lab/\Count/\Content [count=\Y] in {#5}
-    {\node[anchor=south] at ({2*\Y+\Yoff},{\Xmax/2+0.1+\Xoff}) {\Layer};
+    { \node[anchor=south] at ({2*\Y+\Yoff},{\Xmax/2-0.5+\Xoff}) {\Layer};
       \foreach \m in {1,...,\X}
       {
         \ifnum\m=\Miss
@@ -91,11 +91,11 @@
         \else
           \ifnum\Y=1
             \ifnum\m=\X
-              \draw [overlay] (nn-\nn-\Y-\m) -- (state);
+              \draw [overlay] (nn-\nn-\Y-\m) -- (\nn-state);
             \else
               \ifnum\m=\Miss
               \else
-                \draw [overlay] (nn-\nn-\Y-\m) -- (state);
+                \draw [overlay] (nn-\nn-\Y-\m) -- (\nn-state);
               \fi
             \fi
           \else
@@ -109,14 +109,14 @@
 \begin{tikzpicture}[x=1.5cm, y=1.5cm, >=stealth,font=\sffamily,nodes={align=center}]
 \begin{scope}[local bounding box=T]
   \begin{scope}[local bounding box=NN]
-   \DrawNeuronalNetwork[1][6][0][state]{Input Layer/5/green/4/inp1//600,
-     Hidden Layer 1/5/blue/4/h1//16,
-     Hidden Layer 2/5/cyan/4/h2//32}
-   \DrawNeuronalNetwork[2][0][2][action]{Input Layer/5/green/4/inp2//68,
-     Hidden Layer 1/5/yellow/4/out//32}
-   \DrawNeuronalNetwork[3][3][8][concat]{Hidden Layer/5/orange/4/out//64,
-     Hidden Layer 1/5/blue/4/h1//64,
-     Output Layer 2/1/green/0/output//1}
+   \DrawNeuronalNetwork[1][6][0][state]{State Input/5/green/4/inp1//600,
+     Hidden 1/5/blue/4/h1//16,
+     Hidden 2/5/cyan/4/h2//32}
+   \DrawNeuronalNetwork[2][0][2][action]{Action Input/5/green/4/inp2//68,
+     Hidden 3/5/yellow/4/out//32}
+   \DrawNeuronalNetwork[3][3][8][concat]{Hidden 4/5/orange/4/out//64,
+     Hidden 5/5/blue/4/h1//64,
+     Output/1/green/0/output//1}
   \end{scope}
   \path (NN.south) node[below]{Estimated parameter\\ $\theta$};
   \path (nn-3-3-1.east) -- node[above]{Action value\\ $q_{\pi_{\theta}}(s,a)$}++ (4em,0);
@@ -124,8 +124,13 @@
  \node[fit=(T),label={[anchor=north west]north west:Critic},inner sep=1em,draw]
   (TF){};
  \node[below=3em of TF,draw,inner sep=1em] (Env) {Environment};
- \draw[<-] (TF.200) -- ++ (-1em,0) |- (Env.160) node[pos=0.45,right]{$r_t$};
- \draw[<-] (TF.180) -- ++ (-2em,0) |- (Env.180) node[pos=0.45,left]{$s_t$};
- \draw[->] (nn-3-3-1.east) -- ++ (7em,0)node[right]{$a_t$} |- (Env);
+ \node[below=3em of TF,draw,inner sep=1em, right = 3 of Env] (Actor) {Actor};
+ \draw[<-] (TF.200) -- ++ (-2em,0) |- (Env.160) node[pos=0.45,right]{$r_t$};
+ \draw[<-] (1-state) -- ++ (-8em,0) |- (Env.180) node[pos=0.45,left]{$s_t$};
+ \draw[->] (nn-3-3-1.east) -- ++ (7em,0) |- node [above, pos=0.85]{Policy Gradient} (Actor) -- node[pos=0.5, circle, fill, inner sep=2pt] (Action) {} node[above,pos=0.4]{{$a_t$}} (Env);
+ \coordinate  (A) at ($ (Action) + (0, 0.5) $);
+ %\coordinate let \p1=(Env.180), \p2=(Env.160) in (A) at ($ (Action) + (0, 0.5) $);
+ \draw[<-]  let \p1=(Env.180), \p2=(Env.160) in (2-state) -- ++ (-8em,0) |- ($(Action) + (0, \y2-\y1) + (0, \y2-\y1)$) node[pos=0.2,left]{$a_t$} -- (Action);
+ %\draw[<-] (2-state) -- ++ (-8em,0) |- (A) node[pos=0.2,left]{$a_t$} -- (Action);
 \end{tikzpicture}
 \end{document}
