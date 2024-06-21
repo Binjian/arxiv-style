@@ -125,10 +125,12 @@
   (TF){};
  \node[below=3em of TF,draw,inner sep=1em] (Env) {Environment};
  \node[below=3em of TF,draw,inner sep=1em, right = 3 of Env] (Actor) {Actor};
- \draw[<-] (TF.200) -- ++ (-2em,0) |- (Env.160) node[pos=0.45,right]{$r_t$};
- \draw[<-] (1-state) -- ++ (-8em,0) |- (Env.180) node[pos=0.45,left]{$s_t$};
+ \node[circle, fill, inner sep=2pt] at (Env.170) (rt) {};
+ \node[circle, fill, inner sep=2pt] at (Env.190) (st) {};
+ \draw[<-] (TF.200) -- ++ (-2em,0) |- (Env.170) node[pos=0.45,right]{$r_t$};
+ \draw[<-] (1-state) -- ++ (-8em,0) |- (Env.190) node[pos=0.45,left]{$s_t$};
  \draw[->] (nn-3-3-1.east) -- ++ (7em,0) |- node [above, pos=0.85]{Policy Gradient} (Actor) -- node[pos=0.5, circle, fill, inner sep=2pt] (Action) {} node[above,pos=0.4]{{$a_t$}} (Env);
- \coordinate  (A) at ($ (Action) + (0, 0.5) $);
+ \coordinate (A) at ($ (Action) + (0, 0.5) $);
  %\coordinate let \p1=(Env.180), \p2=(Env.160) in (A) at ($ (Action) + (0, 0.5) $);
  \draw[<-]  let \p1=(Env.180), \p2=(Env.160) in (2-state) -- ++ (-8em,0) |- ($(Action) + (0, \y2-\y1) + (0, \y2-\y1)$) node[pos=0.2,left]{$a_t$} -- (Action);
  %\draw[<-] (2-state) -- ++ (-8em,0) |- (A) node[pos=0.2,left]{$a_t$} -- (Action);
