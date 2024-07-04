@@ -20,7 +20,7 @@
 \usepackage{svg}
 %\usepackage{import}
 \graphicspath{{images/}}
-\title{Vehicle energy optimization system - an application of deep reinforcement learning with human in the loop}
+\title{Electric vehicle energy optimization system - A case study of applications of deep reinforcement learning in the real world}
 
 
 % Here you can change the date presented in the paper title
@@ -61,13 +61,9 @@
 % box is needed for correct spacing with authblk
 \newbox{\orcid}\sbox{\orcid}{\includegraphics[scale=0.06]{orcid.pdf}}
 \author[1]{%
-	\href{https://orcid.org/0000-0000-0000-0000}{\usebox{\orcid}\hspace{1mm}David S.~Hippocampus\thanks{\texttt{hippo@cs.cranberry-lemon.edu}}}%
+	\href{https://orcid.org/0009-0003-0705-2612}{\usebox{\orcid}\hspace{1mm}Binjian Xin\thanks{\texttt{binjian.xin@gmail.com}}}%
 }
-\author[1,2]{%
-	\href{https://orcid.org/0000-0000-0000-0000}{\usebox{\orcid}\hspace{1mm}Elias D.~Striatum\thanks{\texttt{stariate@ee.mount-sheikh.edu}}}%
-}
-\affil[1]{Department of Computer Science, Cranberry-Lemon University, Pittsburgh, PA 15213}
-\affil[2]{Department of Electrical Engineering, Mount-Sheikh University, Santa Narimana, Levand}
+\affil[1]{}
 \fi
 
 % Uncomment to override  the `A preprint' in the header
@@ -79,10 +75,10 @@
 %%% Once the PDF is generated, you can check the metadata with
 %%% $ pdfinfo template.pdf
 \hypersetup{
-pdftitle={A template for the arxiv style},
+pdftitle={Electric Vehicle Optimizaiton System},
 pdfsubject={q-bio.NC, q-bio.QM},
-pdfauthor={David S.~Hippocampus, Elias D.~Striatum},
-pdfkeywords={First keyword, Second keyword, More},
+pdfauthor={Binjian Xin},
+pdfkeywords={Deep Reinforcement Learning, Electric Vehicle, Time Series},
 }
 
 
@@ -95,84 +91,26 @@ pdfkeywords={First keyword, Second keyword, More},
 \end{abstract}
 
 % keywords can be removed
-\keywords{First keyword \and Second keyword \and More}
+\keywords{deep reinforcement learning \and electric vehicle \and time series}
 
 
 \section{Introduction}
 \label{sec:intro}
-
-\lipsum[4]
-
-\[
-\gamma
-\]
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-  \draw[thin,dotted] (-3,-3) grid (3,3);
-  \draw[->] (-3,0) -- (3,0);
-  \draw[->] (0,-3) -- (0,3);
-  \end{tikzpicture}
-  \caption{Caption}
-  \label{label}
-\end{figure}
-
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics{test.png}
-  \caption{\label{fig:label} test image}
-\end{figure}
-
-\begin{figure}[ht]
-  \centering
-  \def\svgwidth{\columnwidth}
-  \input{images/test_excalidraw.pdf_tex}
-  \caption{\label{fig:label} test excalidraw export image}
-\end{figure}
-
-
-\(\alpha\)
-
-\[
-\frac{d}{a}
-\]
-
-\[
-\beta \cdot \Box
-\implies \overleftarrow{b}
-\arcsin(\alpha)
-\]
-
-
-
-The Taylor expansion of
-\(e^{x}\)
-
-
-\[
-x + \frac{x^2}{2} + \frac{x^3}{6} + \frac{x^4}{24} + \frac{x^5}{120} + \frac{x^6}{720} + \frac{x^7}{5040} + \frac{x^8}{40320} + 1
-\]
-
-
-\(\nabla\)
 
 
 \texttt{definition}
 
 \textsl{theorem}
 
-\lipsum[2]
-\lipsum[3]
+\subsection{Background}
+\label{sec:intro:background}
+
+\section{Related work}
+\label{sec:related}
 
 
-\section{Headings: first level}
-\label{sec:headings}
-
-\lipsum[4] See Section \ref{sec:headings}.
-
-\subsection{Headings: second level}
+\section{preliminary}
+\subsection{}
 \lipsum[5]
 \begin{equation}
 	\xi _{ij}(t)=P(x_{t}=i,x_{t+1}=j|y,v,w;\theta)= {\frac {\alpha _{i}(t)a^{w_t}_{ij}\beta _{j}(t+1)b^{v_{t+1}}_{j}(y_{t+1})}{\sum _{i=1}^{N} \sum _{j=1}^{N} \alpha _{i}(t)a^{w_t}_{ij}\beta _{j}(t+1)b^{v_{t+1}}_{j}(y_{t+1})}}
@@ -183,6 +121,43 @@ x + \frac{x^2}{2} + \frac{x^3}{6} + \frac{x^4}{24} + \frac{x^5}{120} + \frac{x^6
 
 \paragraph{Paragraph}
 \lipsum[7]
+
+\section{system design}
+\label{sec:design}
+
+A new real world application of deep reinforcement learning, with considerations of leveraging capacity of deep neural network to make use of a large mount of data.
+
+checking and review the applications of current deep rl techniques, in theory and practice. Caveats regarding the issues of applying deep reinforcement. System design and experiment design, data collection, safety, system resi
+interesting issues of system safety and persistance, task persistance.
+explore the application of recent offline-reinforcment learning in this application.
+
+
+
+\begin{figure}[ht]
+  \centering
+  \def\svgwidth{\columnwidth}
+  \input{images/veos_system.pdf_tex}
+  \caption{\label{fig:veos} EVEOS system}
+\end{figure}
+
+
+\subsection{Data pipelines}
+
+\begin{figure}[ht]
+  \centering
+  \def\svgwidth{\columnwidth}
+  \input{images/tspace_overview.pdf_tex}
+  \caption{\label{fig:label} Software Overview}
+\end{figure}
+
+
+\section{Result and discussion}
+\label{sec:result}
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
 
 
 

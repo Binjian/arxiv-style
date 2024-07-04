@@ -1,0 +1,38 @@
+\documentclass[tikz,border=10pt]{standalone}
+
+\usetikzlibrary{shapes,arrows,positioning}
+\begin{document}
+
+%\tikzstyle{block} = [draw, fill=white, rectangle,
+%    minimum height=3em, minimum width=6em]
+%\tikzstyle{input} = [coordinate]
+\tikzset{block/.style = {draw, fill=white, rectangle, minimum height=3em, minimum width=6em},
+            input/.style = {coordinate},
+            output/.style = {circle, fill, inner sep=2pt},
+            coord/.style = {coordinate},
+            pinstyle/.style = {pin edge={<-,thin,black}}}
+
+\begin{tikzpicture}[auto, node distance=3cm,>=latex']
+
+    \node [input, name=input] {};
+    \node [block, right = 1cm of input] (driver) {Driver};
+    \node [block, right of=driver, align=center] (pedals) {Accelerate \& \\ Brake Pedal};
+    \node [block, right of=pedals, align=center] (vcu) {Powertrain \\ Controller};
+    \node [block, right of=vcu] (pt) {Powertrain};
+    \node [block, right of=pt, node distance=3cm] (vehicle) {vehicle};
+    \node [output, right of=vehicle] (output) {};
+    \node [block, above = 1cm of vcu] (agent) {Agent};
+    \node [coord, below = 1cm of vcu] (feedback) {feedback};
+
+    \draw [->] (input) -- (driver);
+    \draw [->] (driver) -- (pedals);
+    \draw [->] (pedals) -- (vcu);
+    \draw [->] (vcu) -- (pt);
+    \draw [->] (pt) -- (vehicle);
+    \draw [-] (vehicle) -- node [name=signal] {$v$,$A$,$B$}(output);
+    \draw [->] (output) |- (agent);
+    \draw (output) |- (feedback);
+    \draw (feedback) -|  (input);
+    \draw [->] (agent) -- (vcu);
+\end{tikzpicture}
+\end{document}
