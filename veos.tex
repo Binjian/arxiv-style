@@ -18,9 +18,14 @@
 \usepackage{natbib}
 \usepackage{doi}
 \usepackage{svg}
+\usepackage[toc,page]{appendix}
 %\usepackage{import}
+
+\usetikzlibrary{shapes,arrows,positioning}
+
+
 \graphicspath{{images/}}
-\title{Electric vehicle energy optimization system - A case study of applications of deep reinforcement learning in the real world}
+\title{Electric vehicle energy optimization system --- A case study for applications of deep reinforcement learning in the real world}
 
 
 % Here you can change the date presented in the paper title
@@ -29,7 +34,7 @@
 %\date{}
 
 \newif\ifuniqueAffiliation
-% Comment to use multiple affiliations variant of author block 
+% Comment to use multiple affiliations variant of author block
 \uniqueAffiliationtrue
 
 \ifuniqueAffiliation % Standard variant of author block
@@ -87,20 +92,19 @@ pdfkeywords={Deep Reinforcement Learning, Electric Vehicle, Time Series},
 \maketitle
 
 \begin{abstract}
-	\lipsum[1]
+  We present the application of deep reinforcement learning in the optimization of energy efficiency of driving an electric vehicle. The optimziation is modeled as Markov Decision Process and the design choice of the state, action and reward is provided. We set up a flexible data pipeline for capturing, processing, storing and sampling time sequences which enables both online and offline reinforcement learning. The training and inferring set up of the agent are provided with respect to the practical technicalities. Our system is scalable by leveraging the cloud infracstructure therefore is capable of handling a massive fleet in scope of the application asynchronously in training and infering deployment. We observe the manifest increase of the energy efficiency on the real road condition within a short time range of online training. We assume the driver behavior is stationary and montior the driving style during training and give an analysis of the interaction between the human driver and the agent. We verify the transferability and multimodality of the trained model on different road conditions and give a review of safety, sample efficiency, data synchronicity of the system concerning the applications of deep reinforcement learning in the real world. Solutions are provided for solving partial observability, long-term stragtegy and efficient training of ragged episode length by leveraging sequential models.
 \end{abstract}
 
 % keywords can be removed
-\keywords{deep reinforcement learning \and electric vehicle \and time series}
+\keywords{deep reinforcement learning \and electric vehicle \and time series \and dataflow}
 
 
 \section{Introduction}
 \label{sec:intro}
 
 
-\texttt{definition}
 
-\textsl{theorem}
+
 
 \subsection{Background}
 \label{sec:intro:background}
@@ -110,17 +114,124 @@ pdfkeywords={Deep Reinforcement Learning, Electric Vehicle, Time Series},
 
 
 \section{preliminary}
-\subsection{}
-\lipsum[5]
+
+\tikzset{block/.style = {draw, fill=white, rectangle, minimum height=3em, minimum width=6em},
+            input/.style = {coordinate},
+            signal/.style = {circle, fill, inner sep=1pt},
+            coord/.style = {coordinate},
+            pinstyle/.style = {pin edge={<-,thin,black}}}
+\scalebox{0.8}{
+    \begin{tikzpicture}[auto, node distance=3cm,>=latex']
+
+      \node [input, name=input] {};
+      \node [block, right = 1cm of input] (driver) {Driver};
+      \node [block, right of=driver, align=center] (pedals) {Accelerate \& \\ Brake Pedal};
+      \node [signal, right=0.5cm of pedals] (psensor) {};
+      \node [block, right= 0.5cm of psensor, align=center] (vcu) {Powertrain \\ Controller};
+      \node [block, right of=vcu] (pt) {Powertrain};
+      \node [signal, right=0.5cm of pt] (vasensor) {};
+      \node [block, right= 0.5cm of vasensor] (vehicle) {vehicle};
+      \node [signal, right of=vehicle] (output) {};
+      \node [block, above = 1cm of vcu] (agent) {Agent};
+      \node [coord, below = 1cm of vcu] (feedback) {feedback};
+
+      \draw [->] (input) -- (driver);
+      \draw [->] (driver) -- (pedals);
+      \draw [-] (pedals) -- (psensor);
+      \draw [->] (psensor) -- (vcu);
+      \draw [->] (vcu) -- (pt);
+      \draw [->] (pt) -- (vehicle);
+      \draw [->] (vehicle) -- (output);
+      \draw [->,thick] (output) |- node [above, pos=0.95] {$V$} (agent.20);
+      \draw [->,thick] (vasensor) |- node [above, pos=0.85] {$U$, $I$} (agent.340);
+      \draw [-] (output) |- (feedback);
+      \draw [->,thick] (psensor) |- node [above, pos=0.6]{$A$,$B$} (agent);
+      \draw [-] (feedback) -|  (input);
+      \draw [->,thick] (agent) -- node [right, pos=0.6] {$\Delta T$}(vcu);
+    \end{tikzpicture}
+
+}
 \begin{equation}
 	\xi _{ij}(t)=P(x_{t}=i,x_{t+1}=j|y,v,w;\theta)= {\frac {\alpha _{i}(t)a^{w_t}_{ij}\beta _{j}(t+1)b^{v_{t+1}}_{j}(y_{t+1})}{\sum _{i=1}^{N} \sum _{j=1}^{N} \alpha _{i}(t)a^{w_t}_{ij}\beta _{j}(t+1)b^{v_{t+1}}_{j}(y_{t+1})}}
 \end{equation}
 
-\subsubsection{Headings: third level}
-\lipsum[6]
 
-\paragraph{Paragraph}
-\lipsum[7]
+Drivers with diverse driving experience tend to have quite different fuel or electricity consumption on the same vehicle and the same driving route. The general common sense is that the driving styles, i.e., how drivers operate the vehicle through acceleration and brake, have an impact on the vehicle energy consumption. we'd expect there exists an experienced driver who has the optimal driving style can handle various driving conditions to achieve the greatest energy efficiency. This leads us to the assumption that if we could apply an agent observing the driving dynamics and adjust the operation of the vehicle, we could reduce the energy consumption.
+
+ The agent will get the vehicle speed $V$, driver operation on the acceleration pedal $A$ and the brake pedal $B$ from the on-board sensors as its observation. The engergy consumption is the product of the voltage $U$ and the current $I$ from the sensors in powertrain. Its action $\Delta T$ will be imposed on the pedal map of powertrain controller. The pedal map is a lookup table which stores the torque request for the electric motor for a given acceleration pedal opening the driver effects and the current speed. The requested torque, once exerted by the electric motor, is proportional to the vehicle acceleration.
+
+
+Here we'd only consider to effect the longitudinal control the vehicle, namely the electric powertrain, since the lateral operation through the steering wheel has far less impact on the energy consumption than the longitudinal control.
+each driver has his own driving style which we model as part of the whole environment.
+
+we can collect a huge amount of drivng data (acceleration pedal, brake pedal, the resulting speed, the energy consumption, the voltage and the current from electric powertain), due to its low data density. we can record and process a long period of driving, to figure out a long-term optimal driving policy regards to what is an energy efficient way of driving.
+
+in low speed, there's a coast-down profile which keeps the vehile in moving forward in low speed
+
+\begin{description}
+    \item[State] at timestamp $t$ is denoted by $s_t$
+      \begin{itemize}
+        \item $v_k$: velocity of the vehicle
+        \item $a_k$: acceleration pedal position in percentage
+        \item $b_k$: brake pedal position in percentage
+        \item $k$: number of frames within a single record. a record starts from timestamp $t$, contains $k$ can frames and ends by the end of the last frame
+        \item each line in a record is referred to as a single frame, whose information can be extracted from multiple can frames at the same moment
+        \item rows within a record is contiguous in time starting from the timestamp $t$
+        \item in case of frame loss, a loss token needs to be inserted as a lost frame state at the next timestamp of $t$, that is $t+1$
+      \end{itemize}
+    \item[Next State] the next state following $s_t$ is denoted by $s'_t$
+      \begin{itemize}
+        \item the state according to which the next decsion $a_t$ will be made.
+        \item in case of previous assumption, this state will contain the next adjacent 30 frames of state $s_t$.
+        \item $s'_t$ must be contiguous in time to $s_t$
+      \end{itemize}
+    \item[Action] at timestamp $t$ is denoted by $a_t$
+      \begin{itemize}
+        \item it's the decision of what pedal map will be applied after observing the state $s_t$ by the agent
+        \item the action $a_t$ of veos system is the pedal map $[pm_{5\times17}]^t$ at timestamp $t$. it's currently 5 consecutive rows in the full pedal map corresponding to the current state $s_t$, 17 is the current discretization level of the throttle pedal percentage. each element of the pedal map is the requested torque given the vehicle velocity and the throttle pedal position
+        \item the real effective time of $a_t$ could be delayed by $\delta t$ due to transmission and flashing latency, i.e. $a_t$ will be applied at $t+\delta t$
+        \item $a_t$ must precede $s'_t$, that is $t+\delta t < t+1$ so that the next state $s'_t$ is the result of applying $a_t$
+      \end{itemize}
+    \item[Reward] at timestamp $t$ is denoted by $r_t$
+      \begin{itemize}
+        \item it's the electricity consumption effected by the action $a_t$
+        \item it's computed by accumlating the product of battery voltage $u_{r_k}$ and current values $i_{r_k}$ at the frames after the current action $a_t$ is applied and before the next action $a_{t+1}$ becomes effective, that is to say, the voltage and current values after the moment $r_0$  when flashi1ng the pedal map is done and in effect, until after the last effective moment $r_k$  when the next action $a_{t+1}$ is applied (flashed and in effect)
+      \end{itemize}
+    \item[Record] is the uploading unit of remote-can module. Tt's a timestamped quadruple, which is a tuple of 4 elements $(s_t, a_t, r_t, s'_t)$ with a timestamp $t$
+      \begin{itemize}
+        \item a record without timestamp is called a quadruple
+        \item the sequence of records consist of an episode
+      \end{itemize}
+    \item[Episode] An episode is a consecutive sequence of Record with a start and a termination state which typically represents a driving route/task or a test case and the vehicle operates on routinely.
+      \begin{itemize}
+        \item *Triple*: Since the sequence is consecutive, the next state $s'_t$ is the next adjacent state $s_{t+1}$ and thus not required in the tuple. Therefore one record is reduced to a triple.
+        \item *Null elements*: Care needs to be taken to insert null elements in the sequence in case of absent records.
+        \item *Ragged*: $T$ is the total time steps of the episode. Episodes have different sequence length, since the termination of an episode could mean reaching the destination with different speeds or events. Therefore the episode pool  is ususally ragged.
+        \item $e_T=[(s_0,a_0,r_0),(s_1,a_1,r_1), \ldots,(s_{T-1},a_{T-1},r_{T-1})]$
+      \end{itemize}
+\end{description}
+
+The structure of the record looks like the following table
+
+
+\begin{table}
+	\caption{Sample table}
+	\centering
+	\begin{tabular}{c c c c c}
+		\toprule
+		$t$                 & $s_{t}$                   & $a_t$           & $r_t$                 & $s'_t$ \\
+		\cmidrule(r){1-1} \cmidrule(r){2-4} \cmidrule{5-5}
+        1                   & $V_1$, $A_1$, $B_1$       & $\Delta T_{1}$  &  $U_{1}$, $I_{1}$   & $V'_1$, $A'_1$, $B'_1$ \\
+        \ldots                   &     \ldots                   & \ldots                & \ldots                    & \ldots \\
+        $i_{1}$             & $V_{i_{1}}$, $A_{i_{1}}$, $B_{i_{1}}$      & $\Delta T_{i_{1}}$      & $U_{i_{1}}$, $I_{i_{1}}$    & $V'_{i_{1}}$, $A'_{i_{1}}$, $B'_{i_{1}}$  \\
+                            &   \ldots                     & \ldots            & \ldots                      & \ldots \\
+        $i_{l}$             & $V_{i_{l}}$, $A_{i_l}$, $B_{i_l}$         &  $\Delta T_{i_{l}}$     & $U_{i_{l}}$, $I_{i_{l}}$   & $V'_{i_{l}}$, $A'_{i_{l}}$, $B'_{i_{l}}$ \\
+        \ldots                 &     \ldots                     & \ldots                  & \ldots               & \ldots \\
+        K                 & $V_K$, $A_K$, $B_K$  & $\Delta T_{K}$     & $U_K$, $I_K$   & $V'_K$, $A'_K$, $B'_K$ \\
+		\bottomrule
+	\end{tabular}
+	\label{tab:table}
+\end{table}
 
 \section{system design}
 \label{sec:design}
@@ -232,7 +343,12 @@ The documentation for \verb+booktabs+ (`Publication quality tables in LaTeX') is
 
 \cite{wong21:_deep_multiag_reinf_learn}
 
-
+\begin{appendices}
+\section{dataflow}
+The dataflow of the pipelines
+\section{MLOps}
+The ML operations
+\end{appendices}
 %\bibliographystyle{unsrtnat}
 \bibliographystyle{abbrvnat}
 \bibliography{references}  %%% Uncomment this line and comment out the ``thebibliography'' section below to use the external .bib file (using bibtex) .
