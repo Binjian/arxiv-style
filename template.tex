@@ -120,9 +120,17 @@ pdfkeywords={First keyword, Second keyword, More},
 
 \section{Introduction}
 
+
 \lipsum[2]
 \lipsum[3]
 
+
+\cite{DBLP:journals/corr/abs-2305-18278}
+
+\cite{DBLP:journals/corr/abs-2402-05929}
+
+
+\cite{Reddy_2018}
 
 \section{Headings: first level}
 \label{sec:headings}
@@ -167,34 +175,34 @@ See Figure \ref{fig:fig1}. Here is how you add footnotes. \footnote{Sample of th
 \end{figure}
 
 \begin{figure}
-  \centering
-  \begin{tikzpicture}
-  \draw[thin,dotted] (-3,-3) grid (3,3);
-  \draw[->] (-3,0) -- (3,0);
-  \draw[->] (0,-3) -- (0,3);
-  \end{tikzpicture}
-  \caption{Caption}
-  \label{label}
+	\centering
+	\begin{tikzpicture}
+		\draw[thin,dotted] (-3,-3) grid (3,3);
+		\draw[->] (-3,0) -- (3,0);
+		\draw[->] (0,-3) -- (0,3);
+	\end{tikzpicture}
+	\caption{Caption}
+	\label{label}
 \end{figure}
 
 \[
-\gamma
+	\gamma
 \]
 
 \begin{figure}[ht]
-  \centering
-  \includegraphics{images/test.png}
-  \caption{\label{fig:label} test image}
+	\centering
+	\includegraphics{images/test.png}
+	\caption{\label{fig:label} test image}
 \end{figure}\subsection{Tables}
 See awesome Table~\ref{tab:table}.
 
 
-\begin{figure}[ht]
-  \centering
-  \def\svgwidth{\columnwidth}
-  \includesvg{images/test_excalidraw}
-  \caption{\label{fig:label} test excalidraw export image}
-\end{figure}
+%\begin{figure}[ht]
+%  \centering
+%  \def\svgwidth{\columnwidth}
+%  \includesvg{images/test_excalidraw}
+%  \caption{\label{fig:label} test excalidraw export image}
+%\end{figure}
 
 The documentation for \verb+booktabs+ (`Publication quality tables in LaTeX') is available from:
 \begin{center}
@@ -227,7 +235,8 @@ The documentation for \verb+booktabs+ (`Publication quality tables in LaTeX') is
 \end{itemize}
 
 
-\bibliographystyle{unsrtnat}
+\bibliographystyle{plain}
+%\bibliographystyle{unsrtnat}
 \bibliography{references}  %%% Uncomment this line and comment out the ``thebibliography'' section below to use the external .bib file (using bibtex) .
 
 

@@ -16,7 +16,11 @@
 \usepackage{cleveref}       % smart cross-referencing
 \usepackage{lipsum}         % Can be removed after putting your text content
 \usepackage{graphicx}
-\usepackage{natbib}
+%\usepackage{natbib}
+%\usepackage[backend=biber,style=apa,apabackref=true,uniquelist=false]{biblatex}
+\usepackage[backend=biber,style=apa,backref=true,uniquelist=false]{biblatex}
+%\usepackage[backend=biber,style=numeric,uniquelist=false]{biblatex}
+%\usepackage{biblatex}
 \usepackage{doi}
 \usepackage{svg}
 \usepackage[toc,page]{appendix}
@@ -88,6 +92,12 @@ pdfkeywords={Deep Reinforcement Learning, Electric Vehicle, Time Series},
 }
 
 
+%\bibliography{rl.bib}  %%% Uncomment this line and comment out the ``thebibliography'' section below to use the external .bib file (using bibtex) .
+%\addbibresource{rl.bib,veos.bib}
+%\bibliography{rl,veos}
+%\bibliography{references.bib}
+\addbibresource{rl.bib}
+\addbibresource{veos.bib}
 
 \begin{document}
 \maketitle
@@ -99,12 +109,24 @@ pdfkeywords={Deep Reinforcement Learning, Electric Vehicle, Time Series},
 % keywords can be removed
 \keywords{deep reinforcement learning \and electric vehicle \and time series \and dataflow}
 
-
 \section{Introduction}
 \label{sec:intro}
 
-Drivers with diverse driving experience tend to have quite different fuel or electricity consumption on the same vehicle and the same driving route. The general common sense is that the driving styles, i.e., how drivers operate the vehicle through acceleration and brake, have an impact on the vehicle energy consumption. We would expect there exists an experienced driver with a specific driving style can handle various road conditions to achieve the optimal energy efficiency. This leads us to the assumption that if we could apply an agent which observe the driving dynamics and adjusts the driving operation, we could reduce the energy consumption. If we choose the right observation and action, we could optimize the energy consumption while driving the vehicle with a general paradigm based on learning methods so that we can leverage a large mount of available driving data.
+Drivers with diverse driving experience tend to have quite different fuel or electricity consumption on the same vehicle and the same driving route. The general common sense is that the driving styles, i.e., how drivers operate the vehicle through acceleration and brake, have an impact on the vehicle energy consumption. We would expect there exists an experienced driver with a specific driving style can handle various road conditions to achieve the optimal energy efficiency. This leads us to the assumption that if we could apply an agent which observe the driving dynamics and adjusts the driving operation, we could reduce the energy consumption. If we choose the right observation and action, we could optimize the energy consumption online or offline for driving the vehicle with a general paradigm based on learning methods so that we can leverage a large mount of easily available driving data.
 
+Nevertheless, the application of deep reinforcement learning in the real world is generally difficult \parencite{Irpan_2018}. The main reasons include the sample inefficiency, reward shaping challenge, local optima, overfitting to rare patterns, unstable training, hyperparameter sensitivity. Most known successful applications of deep reinforcement learning can be found in games \parencite{mnih13:_playin_atari_deep_reinf_learn}, \parencite{DBLP:journals/nature/SilverHMGSDSAPL16}, \parencite{DBLP:conf/ijcai/BrownS17}, \parencite{openai19:_dota_large_scale_deep_reinf_learn}, \parencite{bakhtin22:_Human_level_diplomacy_cicero}, where the system dynamics are deterministic or closely deterministic.
+If the system dynamics is deterministic or very well known and a good simulation is available, then an enormous amount of samples can be generated for training. Furthermore for games specifically, self-play can be used for learning \parencite{Silver_2018}.
+
+In recent years, robotics is the domain with growing successful deployment of deep reinforcement learning in the real world, particularly in manipulation, grasping and legged locomotion. Diverse techniques are used. Usually simulation is leveraged to have a good model for transfer learning in the real world. In particular privileged information of the system dynamics is used to have dedicated modules to explicitly deal with environment changes \parencite{kumar21:_rma}, to learn the alignment of proprioception with exteroception \parencite{Miki_2022}, or to just use a specialized initialization strategy, randomized physical parameters and intentional delay in simulation for efficient exploration \parencite{Song_2023}. Furthermore, \parencite{Hoeller_2024} focuses on limited skill sets to have a modular model structure to increase the learning efficiency. \parencite{smith23:_grow_your_limit} constrains the policy in a principled way to the familiar system dynamics to increase the learning efficiency in the real world. \parencite{wu22:_daydr} leverages the world model and efficient sequential latent encoding of the system dynamics. Overall robotics learning tends to use more imitation learning and utilize offline data, as it's still hard to search for the generic reinforcement learning and extra pre-training and supervised fine-tuning is cheaper \parencite{Irpan_2024}.
+
+In the automotive industry, the most evident applicaion would be autonomous driving. But there's no available public work of autonomous driving in the real world that's based on deep reinforcement learning framework in a principled way. More attention is paid to leveraging simulation to generate sufficient training samples or using prior knowledge in pretrained foundational models and scaling up.
+
+In general, there's no generic end-to-end deep reinforcement learning method for real world applications, but a paradigm to combine deep reinforcement learning with domain specific techniques to alleviate the aforementioned challenges. As each problem in the real world have its specific prior information and exploitable inductive biases, it's only natural to exploit them in an engineering way.
+
+This paper will give an example showing that there're still much potential when major progress in real world applications can be achieved with deep reinforcement learning. While many concerns of the research might be alleviated with design choices, the practical deployment should still comply with the basic requirements of the theories without loss of validity stringently. Eventually in long term, the multimodality, out of data distribution does reallly matter in complex and very long time horizon.
+
+\section{Related work}
+\label{sec:related}
 
 
 
@@ -112,11 +134,7 @@ Drivers with diverse driving experience tend to have quite different fuel or ele
 \subsection{Background}
 \label{sec:intro:background}
 
-\section{Related work}
-\label{sec:related}
-
-
-\section{preliminary}
+When we consider to increase the energy efficiency while driving, we consider the structure in Fig. \ref{fig:Agent_Powertrain}. Without the agent and its input (observation) and output (action), the parameters of the powertrain controller kept static, the depicted process is a regular powertrain control with a driver in the loop. The driver controls the vehicle speed through accelrate and brake pedal while observing the road condition
 
 \tikzset{block/.style = {draw, fill=white, rectangle, minimum height=3em, minimum width=6em},
 	input/.style = {coordinate},
@@ -157,7 +175,7 @@ Drivers with diverse driving experience tend to have quite different fuel or ele
 		\end{tikzpicture}
 	}
 	\caption{Add an agent to the conventional EV powertrain control loop.}
-	\label{Agent_Powertrain}
+	\label{fig:Agent_Powertrain}
 \end{figure}
 
 
@@ -168,6 +186,11 @@ Here we'd only consider to effect the longitudinal control the vehicle, namely t
 each driver has his own driving style which we model as part of the whole environment.
 
 we can collect a huge amount of drivng data (acceleration pedal, brake pedal, the resulting speed, the energy consumption, the voltage and the current from electric powertain), due to its low data density. we can record and process a long period of driving, to figure out a long-term optimal driving policy regards to what is an energy efficient way of driving.
+
+
+We cannot leverage simulation, because there's no efficient simulation available for electric powertrain and complex road condition. Part of the reason is that modeling the real road condition and electric motor is very difficult.
+
+\section{preliminary}
 
 in low speed, there's a coast-down profile which keeps the vehile in moving forward in low speed
 
@@ -249,11 +272,6 @@ The structure of the record looks like the following table
 
 
 
-
-
-
-
-
 A new real world application of deep reinforcement learning, with considerations of leveraging capacity of deep neural network to make use of a large mount of data.
 
 checking and review the applications of current deep rl techniques, in theory and practice. Caveats regarding the issues of applying deep reinforcement. System design and experiment design, data collection, safety, system resi
@@ -287,80 +305,6 @@ explore the application of recent offline-reinforcment learning in this applicat
 \section{Conclusion}
 \label{sec:conclusion}
 
-
-
-
-\section{Examples of citations, figures, tables, references}
-\label{sec:others}
-
-\subsection{Citations}
-Citations use \verb+natbib+. The documentation may be found at
-\begin{center}
-	\url{http://mirrors.ctan.org/macros/latex/contrib/natbib/natnotes.pdf}
-\end{center}
-
-Here is an example usage of the two main commands (\verb+citet+ and \verb+citep+): Some people thought a thing \citep{kour2014real, keshet2016prediction} but other people thought something else \citep{kour2014fast}. Many people have speculated that if we knew exactly why \citet{kour2014fast} thought this\dots
-
-\subsection{Figures}
-\lipsum[10]
-See Figure \ref{fig:fig1}. Here is how you add footnotes. \footnote{Sample of the first footnote.}
-\lipsum[11]
-
-\begin{figure}
-	\centering
-	\fbox{\rule[-.5cm]{4cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
-	\caption{Sample figure caption.}
-	\label{fig:fig1}
-\end{figure}
-
-\subsection{Tables}
-See awesome Table~\ref{tab:table}.
-
-The documentation for \verb+booktabs+ (`Publication quality tables in LaTeX') is available from:
-\begin{center}
-	\url{https://www.ctan.org/pkg/booktabs}
-\end{center}
-
-\begin{table}
-	\caption{Sample table title}
-	\centering
-	\begin{tabular}{lll}
-		\toprule
-		\multicolumn{2}{c}{Part}                   \\
-		\cmidrule(r){1-2}
-		Name     & Description     & Size ($\mu$m) \\
-		\midrule
-		Dendrite & Input terminal  & $\sim$100     \\
-		Axon     & Output terminal & $\sim$10      \\
-		Soma     & Cell body       & up to $10^6$  \\
-		\bottomrule
-	\end{tabular}
-	\label{tab:table}
-\end{table}
-
-\subsection{Lists}
-\begin{itemize}
-	\item Lorem ipsum dolor sit amet
-	\item consectetur adipiscing elit.
-	\item Aliquam dignissim blandit est, in dictum tortor gravida eget. In ac rutrum magna.
-\end{itemize}
-
-\citet{DBLP:journals/corr/abs-2402-05929}
-
-\cite[see][Page 11]{chen17:_ucb_explor_q_ensem}
-
-\Citep[see][page 2]{DBLP:books/mc/22/DijkstraLMSS22}
-
-
-
-\citet{DBLP:journals/cacm/Lamport22}
-
-\citet{kour2014real}
-
-\cite{vidal03:_learn_multiag_system}
-
-\cite{wong21:_deep_multiag_reinf_learn}
-
 \begin{appendices}
 	\section{dataflow}
 	The dataflow of the pipelines
@@ -368,8 +312,7 @@ The documentation for \verb+booktabs+ (`Publication quality tables in LaTeX') is
 	The ML operations
 \end{appendices}
 %\bibliographystyle{unsrtnat}
-\bibliographystyle{abbrvnat}
-\bibliography{references}  %%% Uncomment this line and comment out the ``thebibliography'' section below to use the external .bib file (using bibtex) .
+%\bibliographystyle{abbrvnat}
 %%% Uncomment this section and comment out the \bibliography{references} line above to use inline references.
 % \begin{thebibliography}{1}
 
@@ -388,10 +331,11 @@ The documentation for \verb+booktabs+ (`Publication quality tables in LaTeX') is
 % 	\bibitem{keshet2016prediction}
 % 	Keshet, Renato, Alina Maor, and George Kour.
 % 	\newblock Prediction-Based, Prioritized Market-Share Insight Extraction.
-% 	\newblock In {\em Advanced Data Mining and Applications (ADMA), 2016 12th International 
+% 	\newblock In {\em Advanced Data Mining and Applications (ADMA), 2016 12th International
 %                       Conference of}, pages 81--94,2016.
 
 % \end{thebibliography}
 
+\printbibliography
 
 \end{document}
