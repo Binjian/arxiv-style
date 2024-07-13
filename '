@@ -118,9 +118,9 @@ Drivers with diverse driving experience tend to have quite different fuel or ele
 Nevertheless, the application of deep reinforcement learning in the real world is generally difficult \parencite{Irpan_2018}. The main reasons include the sample inefficiency, reward shaping challenge, local optima, overfitting to rare patterns, unstable training, hyperparameter sensitivity. Most known successful applications of deep reinforcement learning can be found in games \parencite{mnih13:_playin_atari_deep_reinf_learn}, \parencite{DBLP:journals/nature/SilverHMGSDSAPL16}, \parencite{DBLP:conf/ijcai/BrownS17}, \parencite{openai19:_dota_large_scale_deep_reinf_learn}, \parencite{bakhtin22:_Human_level_diplomacy_cicero}, where the system dynamics are deterministic or closely deterministic.
 If the system dynamics is deterministic or very well known and a good simulation is available, then an enormous amount of samples can be generated for training. Furthermore for games specifically, self-play can be used for learning \parencite{Silver_2018}.
 
-In recent years, robotics is the domain with growing successful deployment of deep reinforcement learning in the real world, particularly in manipulation, grasping and legged locomotion. Diverse techniques are used. Usually simulation is leveraged to have a good model for transfer learning in the real world. In particular privileged information of the system dynamics is used to have dedicated modules to explicitly deal with environment changes \parencite{kumar21:_rma}, to learn the alignment of proprioception with exteroception \parencite{Miki_2022}, or to just use a specialized initialization strategy, randomized physical parameters and intentional delay in simulation for efficient exploration \parencite{Song_2023}. Furthermore, \parencite{Hoeller_2024} focuses on limited skill sets to have a modular model structure to increase the learning efficiency.\ \parencite{smith23:_grow_your_limit} constrains the policy in a principled way to the familiar system dynamics to increase the learning efficiency in the real world.\ \parencite{wu22:_daydr} leverages the world model and efficient sequential latent encoding of the system dynamics. Overall robotics learning tends to use more imitation learning and utilize offline data, as it's still hard to search for the generic reinforcement learning and extra pre-training and supervised fine-tuning is cheaper \parencite{Irpan_2024}.
+In recent years, robotics is the domain with growing successful deployment of deep reinforcement learning in the real world, particularly in manipulation, grasping and legged locomotion. Diverse techniques are used. Usually simulation is leveraged to have a good model for transfer learning in the real world. In particular privileged information of the system dynamics is used to have dedicated modules to explicitly deal with environment changes \parencite{kumar21:_rma}, to learn the alignment of proprioception with exteroception \parencite{Miki_2022}, or to just use a specialized initialization strategy, randomized physical parameters and intentional delay in simulation for efficient exploration \parencite{Song_2023}. Furthermore, \parencite{Hoeller_2024} focuses on limited skill sets to have a modular model structure to increase the learning efficiency. \parencite{smith23:_grow_your_limit} constrains the policy in a principled way to the familiar system dynamics to increase the learning efficiency in the real world. \parencite{wu22:_daydr} leverages the world model and efficient sequential latent encoding of the system dynamics. Overall robotics learning tends to use more imitation learning and utilize offline data, as it's still hard to search for the generic reinforcement learning and extra pre-training and supervised fine-tuning is cheaper \parencite{Irpan_2024}.
 
-In the automotive industry, one of the most evident applicaion would be autonomous driving. But there's no available public work of autonomous driving in the real world that's based on deep reinforcement learning framework in a principled way. More attention is paid to leveraging simulation to generate sufficient training samples or using prior knowledge in pretrained foundational models and scaling up.
+In the automotive industry, the most evident applicaion would be autonomous driving. But there's no available public work of autonomous driving in the real world that's based on deep reinforcement learning framework in a principled way. More attention is paid to leveraging simulation to generate sufficient training samples or using prior knowledge in pretrained foundational models and scaling up.
 
 In general, there's no generic end-to-end deep reinforcement learning method for real world applications, but a paradigm to combine deep reinforcement learning with domain specific techniques to alleviate the aforementioned challenges. As each problem in the real world have its specific prior information and exploitable inductive biases, it's only natural to exploit them in an engineering way.
 
@@ -130,7 +130,7 @@ This paper gives an example that progress in real world applications can be achi
 
 Electric vehicles (EVs) have been growing in popularity in the automotive industry with sales increasing globally. The share of electric cars in total sales has increased from negligibly less than 0.1\% in 2010 to 14\% in 2022 \parencite{statista_2023}. The deployment of EVs is largely due to the rising fuel economy standards and the required reduction in greenhouse gas emissions, which leads to the increasing complexity of powertrains in the form of additional actuators and control systems. The energy efficiency of EVs has been the focus of powertrain electrification. In \parencite{Egan_2023} an overview of the reinforcement learning methods applied in powertrain controllers in hybrid electric vehicles (HEVs), fuel cell electric vehicles (FCEVs), plug-in hybrid electric vehicles (PHEVs) is given. They reviewed the state, action space and the reward function of their design choices.
 
-For example, \parencite{Wang_2020} exploits the physical models of extended range electric electric vehciles (EREVs) in the investigation so that the chosen state consists of the traveled distance and time, fuel use and the GPS coordinates of the vehicle and in particular the ``energy compensated expected trip distance'' which by their definition is the expected total trip distance multiplied by a ratio of trip energy intensity and the expected one. The chosen action is the range of the constructed state. The reward function is designed as weighted sum of the penaltes of internal combustion engine (ICE) operation, low state of charge (SOC), change of the constructed state and a specific terminal state. In \parencite{Hou_2022} the state is defined as the power demand and SOC, the action is the fuel cell power, while the reward is a weighted sum of the change rate of the instantaneous hydrogen consumption, a qudratic poloynomial of the battery power with cooefficients containing open-circuit voltage, cell capacity and battery internal resistance in order to reduce unnecessary energy storation while keep the action feasiblity of the electric motor and the ICE.\@ Similarly, \parencite{Hu_2018} selects for HEVs the total required torque and SOC as state and the output torque of ICE as action which is equivalent to the power-split of HEV between the electric motor and ICE, while the reward is defined as the reciprocal of instantaneous fuel consumption of the ICE conditioned on the range of itself and the instantaneous SOC\@.
+For example, \parencite{Wang_2020} exploits the physical models of extended range electric electric vehciles (EREVs) in the investigation so that the chosen state consists of the traveled distance and time, fuel use and the GPS coordinates of the vehicle and in particular the ``energy compensated expected trip distance'' which by their definition is the expected total trip distance multiplied by a ratio of trip energy intensity and the expected one. The chosen action is the range of the constructed state. The reward function is designed as weighted sum of the penaltes of internal combustion engine (ICE) operation, low state of charge (SOC), change of the constructed state and a specific terminal state. In \parencite{Hou_2022} the state is defined as the power demand and SOC, the action is the fuel cell power, while the reward is a weighted sum of the change rate of the instantaneous hydrogen consumption, a qudratic poloynomial of the battery power with cooefficients containing open-circuit voltage, cell capacity and battery internal resistance in order to reduce unnecessary energy storation while keep the action feasiblity of the electric motor and the ICE. Similarly, \parencite{Hu_2018} selects for HEVs the total required torque and SOC as state and the output torque of ICE as action which is equivalent to the power-split of HEV between the electric motor and ICE, while the reward is defined as the reciprocal of instantaneous fuel consumption of the ICE conditioned on the range of itself and the instantaneous SOC\@.
 
 It can be seen that these methods exploit the domain specific knowledge for each of the vehicle model under investigation to select the state and action. The constructed and estimated expectation state signals which are not directly measured contain further biases and noise. Besides, the measureable state signals in those applications require specific sensors or processing and are thus expensive to acquire. Furthermore, it should be noted that even the SOC cannot be directly measured in real time while the vehicle is driving so it's estimated from the measured voltage and a lookup table acquired by calibration. The selected actions serve their specific objective domains and therefore cannot be generalized to other vehicle models. The reward shaping in those applications are never the energy consumption directly, since the objective is to optimize the co-operation of eletric motor and ICE for HEV\@. It's usually a heuristic mixture of electricity and fuel consumption with constraints which are required to regularized the system behavior but in general detrimental to the optimization performance. The weights in the reward brings extra hyperparameters which are sensitive to the system performance and difficult to analyze.
 
@@ -142,7 +142,7 @@ Empirically, the optimization space of the driving operation comes from the way 
 
 \section{Preliminary}\label{sec:intro:preliminary}
 
-In order to increase the energy efficiency while driving, we consider the following structure in Fig.\@\ref{fig:Agent_Powertrain}. Without the agent and its connection to the input (observation) and the output (action), the parameters of the powertrain controller are kept static, the depicted process is a regular powertrain control with the driver in the loop. The driver controls the vehicle speed through acceleration and brake pedal while observing the road condition.
+In order to increase the energy efficiency while driving, we consider the following structure in Fig. \ref{fig:Agent_Powertrain}. Without the agent and its connection to the input (observation) and the output (action), the parameters of the powertrain controller are kept static, the depicted process is a regular powertrain control with the driver in the loop. The driver controls the vehicle speed through acceleration and brake pedal while observing the road condition.
 
 \tikzset{block/.style = {draw, fill=white, rectangle, minimum height=3em, minimum width=6em},
 	input/.style = {coordinate},
@@ -192,18 +192,20 @@ When the agent is connected to the regular system as depicted, it will get the v
 	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{images/table_init.png}
-		\caption{The ``Economic'' pedal map as the initial map}\label{fig:initial pedal map}
+		\caption{The ``Economic'' pedal map as the initial map}
+		\label{fig:initial pedal map}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{images/table_final.png}
-		\caption{The dynamic pedal map}\label{fig:dynamic pedal map}
+		\caption{The dynamic pedal map}
+		\label{fig:dynamic pedal map}
 	\end{subfigure}
 	\caption{\label{fig:pedal map} A pedal map is a 2d mapping table which outputs the torque request given a pedal opening under a certain vehicle speed. (a) The ``Economic'' pedal map is used as initial pedal map by the agent. (b) The pedal map is dynamically modified by the agent during driving conditioned on the vehicle speed and driver operation.}
 \end{figure}
 
-The pedal map is a two-dimensional table which outputs the torque request to the electric motor for a given acceleration pedal opening and a certain vehicle speed. It's a static map for a regular powertrain controller, as depicted in Fig.\@\ref{fig:initial pedal map}. The requested torque, once exerted by the electric motor, is proportional to teh vehicle acceleration. It's usually acquired by vehicle calibration during the pre-development of the EV model. A calibration engineer will generate different pedal maps by testing drives on proving ground or real road and determine table items empirically and by experimental validation. The different pedal maps will correspond to different driving styles which are provided as features to the customers, such as ``Normal'', ``Sport'' or ``Economic''. The customers will choose a pedal map through a vehicle HMI to match their driving style requirements. We select the ``Economic'' pedal map as the default initial pedal map for the agent and check how much the agent can further improve the energy efficiency. The pedal map increases monotonically with the acceleration pedal opening, while decreasing monotonically with the vehicle speed. The maximal torque request occurs when the vehicle starts off and the drive steps on the pedal with full throttle. The map region with low speed ($\leq10kmph$) and negligible pedal openings has the largest the negative torque request, which corresponds to motor in reverse, i.e.\ strong regenerative braking. These are all by design.
+The pedal map is a two-dimensional table which outputs the torque request to the electric motor for a given acceleration pedal opening and a certain vehicle speed. It's a static map for a regular powertrain controller, as depicted in Fig.\@\ref{fig:initial pedal map}. The requested torque, once exerted by the electric motor, is proportional to teh vehicle acceleration. It's usually acquired by vehicle calibration during the pre-development of the EV model. A calibration engineer will generate different pedal maps by testing drives on proving ground or real road and determine table items empirically and by experimental validation. The different pedal maps will correspond to different driving styles which are provided as features to the customers, such as ``Normal'', ``Sport'' or ``Economic''. The customers will choose a driving a pedal map through a vehicle HMI to match their driving style requirements. We select the ``Economic'' pedal map as the default initial pedal map for the agent and check how much the agent can further improve the energy efficiency. The pedal map increases monotonically with the acceleration pedal opening, while decreasing monotonically with the vehicle speed. The maximal torque request occurs when the vehicle starts off and the drive steps on the pedal with full throttle. The map region with low speed ($\leq10kmph$) and negligible pedal openings has the largest the negative torque request, which corresponds to motor in reverse, i.e.\ strong regenerative braking. These are all by design.
 
 When the agent change the torque request for a given range of vehicle speeds under a give pedal opening, the corresponding region of the pedal map will be changed by $\Delta\tau$. If the training occurs on a urban road, we can see the low speed region under 60 kmph is changed as depicted in Fig.\ref{fig:dynamic pedal map}. The resulting pedal map is the sum of the initial map and integration of the action up to the current moment. In our experiment the agent is allowed to change the items all over the map region, which allows implicitly the exploitation of the regenerative braking.
 
@@ -294,11 +296,11 @@ The data in the reinforcement learning model are shown in Tab.\@\ref{tab:quadrup
 \begin{description}
 	\item[State] Since DDPG is not a sequential model, we take the array of $K$ subsequent observations of $(V,A,B)$ as state $s_{t}=(V_{1},A_{1},B_{1},\ldots,V_{K},A_{K},B_{K})$, where each observation is a CAN frame. In the experiment, $K=30$, which amounts to 1.5 seconds of observation for the frame rate at 20 Hz, thus the state dimension for input layers in Fig.\@\ref{fig:actorcritic} is 90. The actor outputs the action $\Delta\tau$ given the state array.
 
-	\item[Action] The dimension of the pedal map in our experiment is $17\times 21$, where the columns axis corresponds to acceleration pedal opening from 0\% to 100\% and the rows axis to the speed range of 0 kmph to 100 kmph. The torque request of the ``Economic'' map ranges from around -2 kNm to 4.4 kNm. While the whole region of the pedal map can be changed by action, it's usually not necessary. Since the acceleration of the vehicle is limited in the usual driving senarios, we choose the action dimension to be $17\times 4=68$, namely 4 rows of the map depending on the observed speed values in the state.  This corresponds to a maximal acceleration of 0.37$g$ (or $3.7m/s^{2}$). While the output of the actor $a_{t}=\Delta\tau$ will change any rows of the pedal map depending on the the speed of the vehicle, the same actor network is used, which means the agent share the same policy for changing the torque request under different speeds. The sharing of same network for different observation reduces the model capacity as well as computation.
+	\item[Action] The dimension of the pedal map in our experiment is $17\times 21$, where the columns axis corresponds to acceleration pedal opening from 0\% to 100\% and the rows axis to the speed range of 0 kmph to 100 kmph. The torque request of the ``Economic'' map ranges from around -2 kNm to 4.4 kNm. While the whole region of the pedal map can be changed by action, it's usually not necessary. Since the acceleration of the vehicle is limited in the usual driving senarios, we choose the action dimension to be $17\times 4=68$, namely 4 rows of the map depending on the observed speed values in the state.  This corresponds to a maximal acceleration of 0.37$g$ (or $3.7m/s^{2}$). While the output of the actor $a_{t}=\Delta\tau$ will change any rows of the pedal map depending on the the speed of the vehicle, the same actor network is used, which means the agent share the same policy for changing the torque request under different speeds. The sharing of same network for diffrent observation reduces the model capacity as well as computation.
 
 	\item[Reward] $r_{t}=\Sigma_{k=1}^{K}(U_{k}\cdot I_{k})$.
 
-	\item[Causality] Care needs to be taken regarding causality of the signal. Since $\Delta\tau$ is computed by the agent after receiving the state array, it will only impact the driving after the pedal map has been written into the VCU flash memory and the eletric motor exerts the requested torque physically, which means only the energy consumption after the torque exertion should be attributed to this action as reward. After receiving the sequence of the raw observations, caching and reordering are necessary. For example, the reward $r_{t}$ for the current action $a_{t}$ comes from the next 1.5 seconds, while the reward in the current observation should be attributed to the last action. Therefore in the next 1.5 seconds only the reward is collected after the action is carried out, which also ensures the next state $s'_{t} (s_{t+1})$ is stable and caused by $a_{t}$. The scheduling of data collection in this way avoids the intererences of subsequent actions, states and rewards thus the signal causality which is crucial for the value estimation.
+	\item[Causality] Care needs to be taken regarding causality of the signal. Since $\Delta\tau$ is computed by the agent after receiving the state array, it will only impact the driving after the pedal map has been written into the VCU flash memory and the eletric motor exerts the torque request physically, which means only the energy consumption after the torque exertion should be attributed to this action as reward. After receiving the sequence of the raw observations, caching and reordering are necessary. For example, the reward $r_{t}$ for the current action $a_{t}$ comes from the next 1.5 seconds, while the reward in the current observation should be attributed to the last action. Therefore in the next 1.5 seconds only the reward is collected after the action is carried out, which also ensures the next state $s'_{t} (s_{t+1})$ is stable and caused by $a_{t}$. The scheduling of data collection in this way avoids the intererences of subsequent actions, states and rewards thus the signal causality which is crucial for the value estimation.
 
 	\item[Loss tokens] In case of frame loss, we simply replace the missing data with null elements as loss tokens, which will be utilized for the agent as a learning signal for handling information loss.
 
@@ -479,9 +481,9 @@ In Fig.\@\ref{fig:openroad b style} we can see the KL divergence is smaller than
 
 \subsubsection{Multimodality}\label{sec:multimodal}
 
-The agent should have multimodal policies to handle different scenarios. Without multimodal capability, multimodal data will mean noise to the agent, so that it will not learn the correct strategies for different data modes.  However, neural networks can approximate multimodal functions very well. It's important to verify that the agent can deal with complex multimodal scenarios efficiently.
+Without multimodality capability, the multimodal training data will mean noise to the agent, so that it will not learn the correct strategies for different data modes. However, neural networks can approximate multimodal functions very well. The agent should have multimodal policies to handle the different scenarios. It's important to verify that the agent can deal with complex multimodal scenarios efficiently.
 
-In order to test the multimodality, we test on the first route but treat halting scenarios due to traffic lights or pedestrians as valid. In test drives we ask the driver to tag the observations of the halting or non-halting state at every right turn for later analysis. Since we have three right turns, this corresponds to 8 modes of data depending states on the right turns to be halted or not. We test for a long time so as to get sufficient sample episodes for each mode. In the analysis, we filter out the different modes for comparison. For each mode, we define the target speed profile, calculate the baseline and the episodic consumption. For the sake of brevity, we only show two modes in Fig.\@\ref{fig:open road mm 000} for not halting at all turns and Fig.\@\ref{fig:open road mm 111} for halting at all turns.
+In order to test the multimodality, we test on the first route but collect the halting scenarios due to traffic lights or pedestrians as valid. In test drives we ask the driver to tag the observations of the halting or non-halting state at every right turn for later analysis. Since we have three right turns, this corresponds to 8 modes of data depending states on the right turns to be halted or not. We test for a long time so as to get sufficient sample episodes for each mode. In the analysis, we filter out the different modes for comparison. For each mode, we define the target speed profile, calculate the baseline and the episodic consumption. For the sake of brevity, we only show two modes in Fig.\@\ref{fig:open road mm 000} for not halting at all turns and Fig.\@\ref{fig:open road mm 111} for halting at all turns.
 
 \begin{figure}[htbp]
 	\centering
@@ -494,7 +496,7 @@ In order to test the multimodality, we test on the first route but treat halting
 	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{images/openroad_mm_000_consumption.png}
-		\caption{Energy consumption. The reduction is 9.5\% in average.}\label{fig:openroad mm 000 consumption}
+		\caption{Energy consumption}\label{fig:openroad mm 000 consumption}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[t]{0.3\textwidth}
@@ -517,85 +519,101 @@ In order to test the multimodality, we test on the first route but treat halting
 	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{images/openroad_mm_111_consumption.png}
-		\caption{Energy consumption. The reduction is 4.3\% in average.}\label{fig:openroad mm 111 consumption}
+		\caption{Energy consumption}\label{fig:openroad mm 111 consumption}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{images/openroad_mm_111_style.png}
-		\caption{Driving style drift}\label{fig:openroad mm 111 style}
+		\caption{Speed of the episodes}\label{fig:openroad mm 111 style}
 	\end{subfigure}
 	\caption{Scenarios for halting at all turns\label{fig:open road mm 111}}
 \end{figure}
 
-We can see from the results that the agent can learn multimodal policies to deal with different scenarios. This indicates a generalized training on real roads without specific handling of the observation data.
 
 
-\section{Discussion}
-\label{sec:discussion}
+\section{System design}
+\label{sec:design}
 
-%If we regard the pedal map as the policy, then the the action we choose is actually is the score function of the policy.
+A new real world application of deep reinforcement learning, with considerations of leveraging capacity of deep neural network to make use of a large mount of data.
 
-Unlike in the games or robotics, we cannot leverage simulation to provide large amount to training data and cannot do sim2real techniques to accelerate the learning, because there's no available efficient simulation for electric powertrain and complex road condition. Part of the reason is that modeling the real road condition and electric motor is very difficult or expensive, which is the normal case for most of the real world applications. We have to learn from the real world. Surprisingly,  our experiment shows that the application of deep reinforcement learning is quite sample efficient in the energy optimiation system. We only need hundreds of episodes to see a clear improvement trend in the result. We believe it's due to the careful design choice of state, action, reward and the data processing that evade much noise in the state and reward.
+checking and review the applications of current deep rl techniques, in theory and practice. Caveats regarding the issues of applying deep reinforcement. System design and experiment design, data collection, safety, system resi
+interesting issues of system safety and persistance, task persistance.
+explore the application of recent offline-reinforcment learning in this application.
 
-An practical advantage of the applicaiton is that system safety and task persistency are not issues like in the robotics \parencite{DBLP:journals_ijrr_IbarzTFKPL21}, since the optimiztion of improving energy efficiency is almost not safety relevant. The agent is free to explore diverse strategies with the safeguard of powertrain control safety measure. Failing to reduce the energy consumption will never interrupt the episode, thus the training is reliable, stable and efficient.
+\begin{figure}[ht]
+	\centering
+	\def\svgwidth{0.8\columnwidth}
+	\input{images/veos_system.pdf_tex}
+	\caption{\label{fig:veos} EOSEV system}
+	\label{fig:EOSEV system}
+\end{figure}
 
-In the exeperiment the DDPG policy is short-term with only several seconds of observation. The results match the experience that good human drivers usually don't need long-term strategy to make the right decision for acceleration or braking. However, long-term observations benefit the right decision. For ramps or diffrent topgraphies of road surfaces which take more than 3 seconds to pass through, the DDPG agent with the current short attention span will not be able to have an optimal policy. To deal with this partial observability, an RDPG agent \parencite{heess15:_memor} is implemented with the LSTM networks \parencite{Hochreiter_1997}. With truncated BPTT \parencite{sutskever2013training} and the stateful feature of LSTM cell \parencite{chollet2015keras}, we can handle arbitrary ragged episode lengths and do inference efficiently with long and short term policies.
 
-The result of transferablitiy in Sec.\@\ref{sec:transferable} with frozen model indicates that while the training must be episodic in order to have meaningful reward signals, the inference-only mode doesn't need to be episodic. A trained frozen model can be deployed for non-episodic situations in inference-only mode in a wide range of applicaitions without the episodic constraint.
+%\begin{figure}[ht]
+%	\centering
+%	\begin{subfigure}[b]{0.45\textwidth}
+%		\centering
+%		\def\svgwidth{\columnwidth}
+%		\input{images/veos_system.pdf_tex}
+%		\caption{\label{fig:veos} EOSEV system}
+%		\label{fig:EOSEV system}
+%	\end{subfigure}
+%	\hfill
+%	\begin{subfigure}[b]{0.45\textwidth}
+%		\centering
+%		\def\svgwidth{\columnwidth}
+%		\input{images/tspace_overview.pdf_tex}
+%		\caption{\label{fig:label} Software Overview}
+%		\label{fig:tspace}
+%	\end{subfigure}
+%\end{figure}
 
-The data in Tab.\@\ref{tab:quadruple} has a low density and is light-weight for collection and storage. In order to leverage the large volume of offline data with ongoing training, an offline reinforcement learning is implemented with IDQL \parencite{hansen-estruch23:_idql}. With the offline data, training can occur in the cloud with uploaded observation data from vehicles. The updated local model can be dispatched onto the vehicle through OTA communication. In this framework, the training and inference can be done flexibly either locally or in the cloud, see Fig.\@\ref{fig:Software overview}. Training and inference locally are fast, have better realtime performance and signal quality, but need extra compute resources on the vehicle. The DDPG agent has a size of less than 1MB as exported tflite models which can be easily stored on the embedded system, while it's difficult to accommodate the RDPG agent with its closely 100 MB.\ On the cloud it's more scalable, doesn't need much compute locally but OTA communication with less realtime performance, larger signal latency and lower signal quality. In large scale deployment, training and inferrence on the cloud also provide an opportunity for federated learning.
 
-Diffusion models have been studies actively in recent offine RL researches, in particular in behavior cloning for policy learning \parencite{janner22:_plann_diffus_flexib_behav_synth} \parencite{wang22:_diffus_polic_expres_polic_class} and \parencite{hansen-estruch23:_idql} \parencite{psenka23:_learn_diffus_model_polic_rewar}. Besides utilized by the offline reinforcement learning, the diffusion models can be used to recover complex and multimodal behavior data. With the diffusion model to fit the behavior policy, the drift of the driving style in Fig.\@\ref{fig:openroad a style} is expected to be better tracked by the implicit actor by the policy extraction \parencite{hansen-estruch23:_idql}. However, the training and sampling in diffusion models require extra noising and denoising time steps, which reduce its realtime performance and constrains their application. All these improvements require more compute resources and need further verification with large scale deployment.
+\subsection{Data pipelines}
+
+\begin{figure}[ht]
+	\centering
+	\def\svgwidth{0.8\columnwidth}
+	\input{images/tspace_overview.pdf_tex}
+	\caption{\label{fig:Software overview} Software Overview}
+\end{figure}
+
+
+\section{Result and discussion}
+\label{sec:result}
+
+We cannot leverage simulation, because we have no available efficient simulation for electric powertrain and complex road condition. Part of the reason is that modeling the real road condition and electric motor is very difficult.
+
+Several only hundreds or thousands of episodes, we can get the trends, because reward is rich.
+
+
+human is in control of the vehicle. An agent
+we can add a deep neural network to learn the human behavior as a model based rl. actor can leverage the
+human can be seen as part of the environment
+
+we can collect a huge amount of drivng data (acceleration pedal, brake pedal, the resulting speed, the energy consumption, the voltage and the current from electric powertain), due to its low data density. Thus we can record and process a very long period of driving, to figure out a long-term optimal driving policy regards to what is an energy efficient way of driving.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/kld-c.png}
+	\caption{KLD of episodic style from baseline over a long time period}\label{fig:EOSEV system}
+\end{figure}
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-We present the application of deep reinforcement learning in the optimization of energy efficiency of driving an electric vehicle. We demonstrate that the design choice of the state, reward and action is crucial. If the reward is rich and dense, the application in real world should be sample efficient. If the observation data are of low density and generally accessible like vehicle speed, acceleration and braking pedal opening but contain complex behaviors or system models, we could harvest a large volume of offline data leverage the offline reinforcement learning to improve the optimization process. As reward-driven learning methods are machine learning method which requires no supervision or labeling, but learns from large amount of raw data, they are appealing to the industrial applications. Our experiment is still far from being scaled up. With deployment with large amount of vehicles in the future, we hope to track complex system dynamics, road scenarios and driving behaviors by more efficient RL methods.
+even larger scales in the production, with thousands of vehicles.
+very suitable for offline reinforcement learning
 
-The purpose of our work is twofold. On the engineering side, we hope to advocate in the industry to leverage abundant available online or offline domain data and interfaces to achieve continuous and dynamic optimization in complex industrial processes which require the large capacity of deep neural networks and have the potential to help reshaping the industry into the data-driven paradigm.
-
-For research, we intend to provide an application of deep reinforcement learning in the real world that provides interesting and challenging optimization goals. Unlike games or robotics, we cannot always leverage simulation in the real world, but we can have abundant data and achieve sample efficiency with prudent design choice of state, action and reward and by careful implementation which maintains the signal causality and avoids adding noise to state and reward signal. Furthermore, system and task persistency are sometimes guaranteed.
+sequential model in learning the driver behavior
+diffusion model
 
 \begin{appendices}
-
-	\section{System design of EOSEV}\label{sec:system design}
-
-	The EOSEV system consists of four components. Fig.\@\ref{fig:EOSEV system} depict the mode where both training and inference are in the cloud. The environment include the real road and the driver. The environment has an impact on the vehicle which change the vehicle speed, acceleration, brake pedal. The powertrain controller (ECU) collects the energy consumption data synchronously. Then the state and reward are uploaded with timestamps in realtime through telematics box (TBox) and OTA to the database in the cloud, where the agent weights are updated and the action $\Delta\tau$ (parameter optimization) is send back through OTA and TBox to reach the ECU. The ECU updates the pedal map and flashes it into its persistent memory.
-
-	If the ECU or TBox has compute resource, the inference could also happen in the vehicle. In this case, the agent is located in ECU or TBox. The cloud server will send the updated weights of the agent instead of the action, if the training is still in the cloud.
-
-	\begin{figure}[ht]
-		\centering
-		\def\svgwidth{0.8\columnwidth}
-		\input{images/veos_system.pdf_tex}
-		\caption{\label{fig:veos} EOSEV system}\label{fig:EOSEV system}
-	\end{figure}
-
-	\section{dataflow}\label{sec:dataflow}
-
-	The implementation for the EOSEV is contained in \texbf{tspace} \parencite{github:tspace}. It is an data pipleline framework for deep reinforcement learning with IO interface, processing and configuration. The current code base depicts an automotive implementation. The goal of the system is to increase the energy efficiency (reward) of a BEV by imposing modification on parameters (action) of powertrain controller, the VCU, based on observations of the vehicle (state), i.e.\ speed, acceleration, electric engine current, voltage etc. The main features are:
-	\begin{itemize}
-		\item both training and inferrence mode;
-		\item coordinated ETL and ML pipelines;
-		\item both online and offline training,
-		\item local and distributed training;
-		\item multiple models: with DDPG and RDPG for time sequences with arbitrary length;
-		\item offline reinforcement learning with “Implict Diffusion Q-Learning” (IDQ);
-		\item compatible data pipelines to both ETL and ML dataflow;
-		\item multiple data sources (local CAN or remote cloud object storage);
-		\item stateful time sequence processing with sequential model;
-		\item support of both NoSQL database, local and cloud data storage.
-	\end{itemize}
-
-	The diagram shows the basic architecture.
-	\begin{figure}[ht]
-		\centering
-		\def\svgwidth{0.6\columnwidth}
-		\input{images/tspace_overview.pdf_tex}
-		\caption{\label{fig:Software overview} Software Overview}
-	\end{figure}
+	\section{dataflow}
 	The dataflow of the pipelines
+	\section{MLOps}
+	The ML operations
 \end{appendices}
 %\bibliographystyle{unsrtnat}
 %\bibliographystyle{abbrvnat}
